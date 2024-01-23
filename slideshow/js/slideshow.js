@@ -7,6 +7,7 @@ const createSlideshow = function () {
     let play = true    
     let nodes = { image: null, caption: null }
     let img = { cache: [], counter: 0 }
+    let speed = 2000
     
     const stopSlideShow = function () {
         clearInterval(timer)
@@ -47,7 +48,7 @@ const createSlideshow = function () {
                 nodes.image = arguments[0]
                 nodes.caption = arguments[1]
             }
-            timer = setInterval(displayNextImage, 2000)
+            timer = setInterval(displayNextImage, speed)
             return this
         },
         createToggleHandler: function () {
@@ -64,6 +65,14 @@ const createSlideshow = function () {
                 setPlayText(this)
                 // TOGGLE PLAY 'FLAG'
                 play = !play
+            }
+        },
+        getInterval: function () {
+            let me = this
+            return function () {
+                speed = prompt(`The current speed is ${speed}. Set New Speed:`)
+                stopSlideShow()
+                me.startSlideShow()
             }
         }
     }
@@ -85,14 +94,9 @@ window.addEventListener('load', () => {
     slideshow.loadImages(slides).startSlideShow($('image'), $('caption'))
     // PAUSE THE SLIDESHOW
     $('play_pause').onclick = slideshow.createToggleHandler()
+    $('setSpeed').onclick = slideshow.getInterval()
 })
 
 
 
-// In Lab 20 you created a slide show of Zak’s Life. The slides changed from one slide to another and the speed at which each slide rotated was hardcoded as the second parameter in the setInterval() method. In this part of the assignment you will create functionality that allows the user to set the speed at which the slideshow plays. Here are some things to consider when building out this functionality within the application:
-
-// You’ll need to start by adding a set speed button to the web page. It should appear to the right of the Pause button.
-// When the user clicks the button, a prompt should appear that has the current speed shown and allows the user to change it to a different speed.
-// Change up the application so that you now have a private variable called speed and the default speed of 2000 should be set for it.
 // Create 2 new public methods within your createSlideshow() method. One should set the speed variable and the other should get the speed variable. You’ll need to figure out what to do within these methods to get the application to work correctly.
-// The second parameter of the setInterval() method will now be set by the speed variable.
